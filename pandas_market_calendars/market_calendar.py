@@ -765,12 +765,12 @@ class MarketCalendar(metaclass=MarketCalendarMeta):
 
         if _adj_others:
             adjusted = schedule.loc[_open_adj].apply(
-                lambda x: x.where(x.ge(x["market_open"]), x["market_open"]), axis=1
+                lambda x: x.astype('datetime64[ns]').dt.tz_localize(tz).where(x.ge(x["market_open"]), x["market_open"]), axis=1
             )
             schedule.loc[_open_adj] = adjusted
 
             adjusted = schedule.loc[_close_adj].apply(
-                lambda x: x.where(x.le(x["market_close"]), x["market_close"]), axis=1
+                lambda x: x.astype('datetime64[ns]').dt.tz_localize(tz).where(x.le(x["market_close"]), x["market_close"]), axis=1
             )
             schedule.loc[_close_adj] = adjusted
 
